@@ -1,0 +1,156 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-main: #0b1115;
+  --bg-secondary: #101c25;
+  --bg-sidebar: #071014;
+  --gold: #d9ae63;
+  --gold-soft: #e7c98a;
+  --text-primary: #f4f0e7;
+  --text-secondary: #aab4bd;
+  --border-subtle: #26343d;
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bg-main);
+  color: var(--text-primary);
+  font-family: 'Inter', 'Manrope', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
+  text-rendering: optimizeLegibility;
+}
+
+canvas {
+  display: block;
+  touch-action: none;
+  outline: none;
+}
+
+/* Custom scrollbars inside panels */
+.scroll-thin {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-subtle) transparent;
+}
+.scroll-thin::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+.scroll-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+.scroll-thin::-webkit-scrollbar-thumb {
+  background: var(--border-subtle);
+  border-radius: 8px;
+}
+.scroll-thin::-webkit-scrollbar-thumb:hover {
+  background: #35454f;
+}
+
+@layer components {
+  .glass-panel {
+    @apply bg-[#101C25]/85 border border-[#26343D] rounded-card backdrop-blur-md shadow-panel;
+  }
+
+  .gold-text {
+    @apply text-gold;
+  }
+
+  .section-label {
+    @apply text-[11px] tracking-[0.22em] uppercase text-text-secondary font-medium;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl
+      bg-gold text-[#0B1115] font-semibold text-sm
+      transition-all duration-200 hover:bg-gold-soft hover:shadow-gold
+      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/70
+      focus-visible:ring-offset-2 focus-visible:ring-offset-[#0B1115];
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl
+      border border-[#26343D] text-text-primary font-medium text-sm
+      bg-[#101C25]/60 transition-all duration-200 hover:border-gold/60 hover:text-gold
+      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/60;
+  }
+
+  .nav-item {
+    @apply relative flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer
+      text-text-secondary text-sm transition-all duration-200 select-none;
+  }
+  .nav-item:hover {
+    @apply text-text-primary bg-white/5;
+  }
+  .nav-item.active {
+    @apply text-gold bg-gold/10;
+  }
+
+  .field-label {
+    @apply block text-xs font-medium text-text-secondary mb-1.5;
+  }
+
+  .field-input {
+    @apply w-full px-3.5 py-2.5 rounded-lg bg-[#0B1115]/70 border border-[#26343D]
+      text-text-primary text-sm placeholder:text-text-secondary/50
+      transition-colors duration-200
+      focus:outline-none focus:border-gold/70 focus:ring-1 focus:ring-gold/40;
+  }
+  .field-input.error {
+    @apply border-red-400/70 focus:border-red-400 focus:ring-red-400/30;
+  }
+
+  .social-mini {
+    @apply flex flex-1 items-center justify-center rounded-lg border border-[#26343D]
+      py-2 text-text-secondary transition-colors hover:border-gold/60 hover:text-gold;
+  }
+}
+
+/* Room label overlay */
+.room-label {
+  pointer-events: auto;
+  transform: translate(-50%, -50%);
+  will-change: transform;
+  transition: opacity 0.25s ease;
+}
+
+/* Focus visible fallback */
+:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* Utility for hiding scrollbar but keeping scroll */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
