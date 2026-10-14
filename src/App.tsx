@@ -8,8 +8,9 @@ import SidebarNavigation from './components/SidebarNavigation'
 import ProfilePanel from './components/ProfilePanel'
 import RoomInfoPanel from './components/RoomInfoPanel'
 import GuidedTour from './components/GuidedTour'
+import WelcomeOverlay from './components/WelcomeOverlay'
+import AmbientControls from './components/AmbientControls'
 import MobileNavigation from './components/MobileNavigation'
-import ControlHints from './components/ControlHints'
 import WebGLFallback, { webglAvailable } from './components/WebGLFallback'
 
 export default function App() {
@@ -81,8 +82,15 @@ function OfficeExperience() {
       <MobileNavigation openDrawer={() => setMobileDrawer(true)} />
       <ProfilePanel />
       <RoomInfoPanel />
-      <ControlHints />
       <GuidedTour />
+
+      {/* Ambient bottom-right controls (desktop only — mobile uses bottom sheets) */}
+      <div className="hidden md:block">
+        <AmbientControls />
+      </div>
+
+      {/* Welcome hero — self-gates to the overview so it never covers room content */}
+      <WelcomeOverlay ready={!loading} />
 
       {/* Cinematic loading screen on top until assets are ready */}
       <AnimatePresence>{loading && <LoadingScreen onDone={() => setLoading(false)} />}</AnimatePresence>

@@ -42,6 +42,12 @@ canvas {
   outline: none;
 }
 
+/* Brightness toggle from the ambient controls dims the 3D scene only. */
+body.dim-scene canvas {
+  filter: brightness(0.62) saturate(0.9);
+  transition: filter 0.4s ease;
+}
+
 /* Custom scrollbars inside panels */
 .scroll-thin {
   scrollbar-width: thin;

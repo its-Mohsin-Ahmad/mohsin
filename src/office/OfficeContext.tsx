@@ -37,6 +37,10 @@ interface OfficeState {
   labelsVisible: boolean
   toggleLabels: () => void
 
+  /** Guided tour trigger. Increments to ask the tour to auto-start. */
+  tourRequest: number
+  requestTour: () => void
+
   /** Profile panel state. */
   profileMinimized: boolean
   setProfileMinimized: (v: boolean) => void
@@ -55,6 +59,7 @@ export function OfficeProvider({ children }: { children: ReactNode }) {
     [number, number] | null
   >(null)
   const [labelsVisible, setLabelsVisible] = useState(true)
+  const [tourRequest, setTourRequest] = useState(0)
   const [profileMinimized, setProfileMinimized] = useState(false)
   const [profileClosed, setProfileClosed] = useState(false)
 
@@ -67,6 +72,8 @@ export function OfficeProvider({ children }: { children: ReactNode }) {
     setActive('home')
     setNavCount((n) => n + 1)
   }, [])
+
+  const requestTour = useCallback(() => setTourRequest((n) => n + 1), [])
 
   const sendCharacterTo = useCallback((x: number, z: number) => {
     setCharacterGoal([x, z])
@@ -103,6 +110,8 @@ export function OfficeProvider({ children }: { children: ReactNode }) {
       cameraGoal,
       labelsVisible,
       toggleLabels,
+      tourRequest,
+      requestTour,
       profileMinimized,
       setProfileMinimized,
       profileClosed,
@@ -119,6 +128,8 @@ export function OfficeProvider({ children }: { children: ReactNode }) {
       cameraGoal,
       labelsVisible,
       toggleLabels,
+      tourRequest,
+      requestTour,
       profileMinimized,
       profileClosed,
     ],

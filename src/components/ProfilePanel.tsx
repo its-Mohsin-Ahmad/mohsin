@@ -6,18 +6,20 @@ import {
   MapPin,
   GraduationCap,
   Download,
+  Sparkles,
+  UserRound,
   Github,
   Linkedin,
   Facebook,
-  ExternalLink,
 } from 'lucide-react'
 import Monogram from './Monogram'
 import { profile } from '../data/profile'
-import { frontendSkills } from '../data/skills'
 import { useOffice } from '../office/OfficeContext'
 
 /**
  * Premium profile panel anchored to the upper-right of the desktop screen.
+ * Mirrors the reference: circular avatar, icon-labelled rows (Education,
+ * Location, Specialties), and Download CV + View Full Profile actions.
  * Supports minimize / close and shows accurate personal information.
  */
 export default function ProfilePanel() {
@@ -26,6 +28,7 @@ export default function ProfilePanel() {
     setProfileMinimized,
     profileClosed,
     setProfileClosed,
+    navigateTo,
   } = useOffice()
 
   return (
@@ -37,39 +40,29 @@ export default function ProfilePanel() {
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: 30 }}
           transition={{ duration: 0.4, ease: 'easeOut' }}
-          className="fixed right-4 top-4 z-30 w-[320px] max-w-[calc(100vw-2rem)]"
+          className="fixed right-4 top-4 z-30 w-[330px] max-w-[calc(100vw-2rem)]"
         >
-          <div className="glass-panel overflow-hidden">
-            <div className="flex items-start gap-3 p-4">
+          <div className="glass-panel relative overflow-hidden">
+            <div className="flex items-start gap-3 p-4 pr-2">
               <div className="shrink-0">
-                <Monogram size={56} />
+                <Monogram size={58} round />
               </div>
-              <div className="min-w-0 flex-1">
+              <div className="min-w-0 flex-1 pt-0.5">
                 <h2 className="font-display text-lg font-bold text-text-primary">
                   {profile.fullName}
                 </h2>
-                <p className="mt-0.5 text-xs leading-snug text-gold">
-                  {profile.headline}
+                <p className="mt-0.5 text-[11px] font-medium leading-snug text-gold">
+                  Software Engineering Student &amp; Frontend Developer
                 </p>
               </div>
-              <div className="flex shrink-0 gap-1">
-                <button
-                  type="button"
-                  onClick={() => setProfileMinimized(!profileMinimized)}
-                  className="rounded-md p-1.5 text-text-secondary transition-colors hover:bg-white/5 hover:text-gold"
-                  aria-label={profileMinimized ? 'Expand profile' : 'Minimize profile'}
-                >
-                  {profileMinimized ? <Maximize2 size={16} /> : <Minimize2 size={16} />}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setProfileClosed(true)}
-                  className="rounded-md p-1.5 text-text-secondary transition-colors hover:bg-white/5 hover:text-gold"
-                  aria-label="Close profile"
-                >
-                  <X size={16} />
-                </button>
-              </div>
+              <button
+                type="button"
+                onClick={() => setProfileClosed(true)}
+                className="shrink-0 rounded-md p-1 text-text-secondary transition-colors hover:bg-white/5 hover:text-gold"
+                aria-label="Close profile"
+              >
+                <X size={16} />
+              </button>
             </div>
 
             <AnimatePresence initial={false}>
@@ -81,50 +74,52 @@ export default function ProfilePanel() {
                   transition={{ duration: 0.3, ease: 'easeInOut' }}
                   className="overflow-hidden"
                 >
-                  <div className="scroll-thin max-h-[52vh] space-y-4 overflow-y-auto px-4 pb-4">
+                  <div className="scroll-thin max-h-[54vh] space-y-3.5 overflow-y-auto px-4 pb-3">
                     <p className="text-xs leading-relaxed text-text-secondary">
-                      {profile.about}
+                      I&apos;m a passionate software engineering student focused
+                      on building modern web applications, creating responsive
+                      interfaces, and working with data-analysis tools like
+                      Excel and Power BI.
                     </p>
 
-                    <div className="space-y-2 text-xs">
-                      <div className="flex items-center gap-2 text-text-secondary">
-                        <GraduationCap size={14} className="text-gold" />
-                        <span>
-                          {profile.education.degree} · {profile.education.gpa}
-                        </span>
+                    <InfoRow icon={<GraduationCap size={15} className="text-gold" />}>
+                      <div className="font-medium text-text-primary">Education</div>
+                      <div className="text-[11px] leading-snug text-text-secondary">
+                        {profile.education.institution}
+                        <br />
+                        {profile.education.degree} ({profile.education.period})
                       </div>
-                      <div className="flex items-center gap-2 text-text-secondary">
-                        <MapPin size={14} className="text-gold" />
-                        <span>{profile.location}</span>
-                      </div>
-                    </div>
+                    </InfoRow>
 
-                    <div>
-                      <div className="section-label mb-2">Core Skills</div>
-                      <div className="flex flex-wrap gap-1.5">
-                        {frontendSkills.slice(0, 6).map((s) => (
-                          <span
-                            key={s.name}
-                            className="rounded-full border border-[#26343D] bg-[#0B1115]/50 px-2.5 py-1 text-[11px] text-text-secondary"
-                          >
-                            {s.name}
-                          </span>
-                        ))}
+                    <InfoRow icon={<MapPin size={15} className="text-gold" />}>
+                      <div className="font-medium text-text-primary">Location</div>
+                      <div className="text-[11px] text-text-secondary">
+                        {profile.location}
                       </div>
-                    </div>
+                    </InfoRow>
 
-                    <div className="flex flex-wrap gap-2">
-                      <a href={profile.cvPath} download className="btn-primary flex-1 text-xs">
-                        <Download size={14} /> Download CV
-                      </a>
+                    <InfoRow icon={<Sparkles size={15} className="text-gold" />}>
+                      <div className="font-medium text-text-primary">Specialties</div>
+                      <div className="text-[11px] text-text-secondary">
+                        Frontend, Excel, Power BI
+                      </div>
+                    </InfoRow>
+
+                    <div className="flex flex-col gap-2 pt-1">
                       <a
                         href={profile.cvPath}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="btn-ghost flex-1 text-xs"
+                        download
+                        className="btn-primary w-full text-xs"
                       >
-                        <ExternalLink size={14} /> View CV
+                        <Download size={14} /> Download CV
                       </a>
+                      <button
+                        type="button"
+                        className="btn-ghost w-full text-xs"
+                        onClick={() => navigateTo('owners')}
+                      >
+                        <UserRound size={14} /> View Full Profile
+                      </button>
                     </div>
 
                     <div className="flex gap-2 border-t border-[#26343D] pt-3">
@@ -142,10 +137,45 @@ export default function ProfilePanel() {
                 </motion.div>
               )}
             </AnimatePresence>
+
+            {/* Minimize / restore control */}
+            <div className="flex justify-end px-3 pb-2">
+              <button
+                type="button"
+                onClick={() => setProfileMinimized(!profileMinimized)}
+                className="flex items-center gap-1 rounded-md px-1.5 py-1 text-[11px] text-text-secondary transition-colors hover:bg-white/5 hover:text-gold"
+                aria-label={profileMinimized ? 'Expand profile' : 'Minimize profile'}
+              >
+                {profileMinimized ? (
+                  <>
+                    <Maximize2 size={13} /> Expand
+                  </>
+                ) : (
+                  <>
+                    <Minimize2 size={13} /> Minimize
+                  </>
+                )}
+              </button>
+            </div>
           </div>
         </motion.aside>
       )}
     </AnimatePresence>
+  )
+}
+
+function InfoRow({
+  icon,
+  children,
+}: {
+  icon: React.ReactNode
+  children: React.ReactNode
+}) {
+  return (
+    <div className="flex items-start gap-2.5">
+      <span className="mt-0.5 shrink-0">{icon}</span>
+      <div className="min-w-0">{children}</div>
+    </div>
   )
 }
 

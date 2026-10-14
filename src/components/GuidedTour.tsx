@@ -11,7 +11,7 @@ import { useOffice } from '../office/OfficeContext'
  * pause, step, skip, or exit at any time and explore freely.
  */
 export default function GuidedTour() {
-  const { active, navigateTo } = useOffice()
+  const { active, navigateTo, tourRequest } = useOffice()
   const [running, setRunning] = useState(false)
   const [index, setIndex] = useState(0)
   const [paused, setPaused] = useState(false)
@@ -53,6 +53,13 @@ export default function GuidedTour() {
   }, [navigateTo])
 
   const exit = useCallback(() => setRunning(false), [])
+
+  // Allow external triggers (Welcome overlay "Start Guided Tour") to start it.
+  useEffect(() => {
+    if (tourRequest > 0) {
+      start()
+    }
+  }, [tourRequest, start])
 
   // Auto-advance every 7s while running and not paused.
   useEffect(() => {
